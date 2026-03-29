@@ -5,9 +5,8 @@ import { BookOpen, ChevronRight } from 'lucide-react';
 interface CourseProps {
   course: {
     _id: string;
-    title: string;
+    name: string;
     description: string;
-    price: number;
     thumbnail?: string;
   }
 }
@@ -19,20 +18,17 @@ export const CourseCard: React.FC<CourseProps> = ({ course }) => {
         {/* Placeholder Thumbnail */}
         <div className="h-40 w-full bg-slate-700/50 relative overflow-hidden">
           {course.thumbnail ? (
-            <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img src={course.thumbnail} alt={course.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
           ) : (
             <div className="flex w-full h-full items-center justify-center bg-gradient-to-br from-indigo-900/40 to-purple-900/40">
               <BookOpen className="w-12 h-12 text-indigo-400/50 transition-transform duration-500 group-hover:scale-110 group-hover:text-indigo-400" />
             </div>
           )}
-          <div className="absolute top-4 right-4 rounded-full bg-indigo-600/90 backdrop-blur-sm px-3 py-1 font-semibold text-white text-sm">
-            ${course.price}
-          </div>
         </div>
         
         {/* Course Info */}
         <div className="p-6 flex flex-col flex-grow">
-          <h3 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">{course.title}</h3>
+          <h3 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-1">{course.name}</h3>
           <p className="mt-2 text-sm text-slate-400 line-clamp-2 flex-grow">{course.description}</p>
           
           <div className="mt-6 flex items-center justify-between text-indigo-400 font-medium text-sm">

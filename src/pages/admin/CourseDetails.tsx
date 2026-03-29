@@ -57,7 +57,7 @@ export const CourseDetails: React.FC = () => {
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
             <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-white mb-2">{course.title}</h1>
+              <h1 className="text-4xl font-extrabold tracking-tight text-white mb-2">{course.name}</h1>
               <p className="text-lg text-slate-400 max-w-2xl">{course.description}</p>
             </div>
             {activeTab === 'batches' && (

@@ -55,9 +55,9 @@ export const BatchDetails: React.FC = () => {
                 <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 rounded-md text-xs font-semibold uppercase tracking-wider border border-indigo-500/20">
                   Batch
                 </span>
-                <span className="text-slate-400 text-sm font-medium">Included in: <span className="text-slate-300">{batch.course?.title || 'Unknown Course'}</span></span>
+                <span className="text-slate-400 text-sm font-medium">Included in: <span className="text-slate-300">{batch.course?.name || 'Unknown Course'}</span></span>
               </div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-white">{batch.title}</h1>
+              <h1 className="text-4xl font-extrabold tracking-tight text-white">{batch.name}</h1>
             </div>
             
             <div className="flex gap-3">

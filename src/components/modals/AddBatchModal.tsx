@@ -10,14 +10,14 @@ interface AddBatchModalProps {
 }
 
 export const AddBatchModal: React.FC<AddBatchModalProps> = ({ courseId, isOpen, onClose }) => {
-  const [formData, setFormData] = useState({ title: '', price: 0 });
+  const [formData, setFormData] = useState({ name: '' });
   const queryClient = useQueryClient();
 
   const addBatchMutation = useMutation({
     mutationFn: () => createBatch({ ...formData, course: courseId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['batches', courseId] });
-      setFormData({ title: '', price: 0 });
+      setFormData({ name: '' });
       onClose();
     }
   });
@@ -47,27 +47,14 @@ export const AddBatchModal: React.FC<AddBatchModalProps> = ({ courseId, isOpen, 
             )}
             
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Batch Title / Identifier</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Batch Name / Identifier</label>
               <input
                 type="text"
                 required
-                value={formData.title}
-                onChange={e => setFormData({ ...formData, title: e.target.value })}
+                value={formData.name}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
                 className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
                 placeholder="e.g. Fall 2026 Morning"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Batch Price Override ($)</label>
-              <input
-                type="number"
-                min="0"
-                required
-                value={formData.price}
-                onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
-                placeholder="Optional custom price"
               />
             </div>
 

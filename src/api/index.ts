@@ -26,13 +26,13 @@ const API_BASE = 'http://localhost:3000/api';
 // Courses
 export const getCourses = () => fetchWithAuth(`${API_BASE}/admin/course`);
 export const getCourseById = (id: string) => fetchWithAuth(`${API_BASE}/admin/course/${id}`);
-export const createCourse = (data: { title: string, description: string, price: number }) => 
+export const createCourse = (data: { name: string, description: string }) => 
   fetchWithAuth(`${API_BASE}/admin/course`, { method: 'POST', body: JSON.stringify(data) });
 
 // Batches
 export const getBatchByCourse = (courseId: string) => fetchWithAuth(`${API_BASE}/admin/batches/course/${courseId}`);
 export const getBatchById = (id: string) => fetchWithAuth(`${API_BASE}/admin/batches/${id}`);
-export const createBatch = (data: { title: string, course: string, price: number }) => 
+export const createBatch = (data: { name: string, course: string }) => 
   fetchWithAuth(`${API_BASE}/admin/batches`, { method: 'POST', body: JSON.stringify(data) });
 export const addStudentToBatch = (batchId: string, studentId: string) => 
   fetchWithAuth(`${API_BASE}/admin/batches/${batchId}/add-student`, { method: 'POST', body: JSON.stringify({ studentId }) });

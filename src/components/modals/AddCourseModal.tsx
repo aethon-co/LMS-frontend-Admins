@@ -9,14 +9,14 @@ interface AddCourseModalProps {
 }
 
 export const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState({ title: '', description: '', price: 0 });
+  const [formData, setFormData] = useState({ name: '', description: '' });
   const queryClient = useQueryClient();
 
   const addCourseMutation = useMutation({
     mutationFn: () => createCourse(formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['courses'] });
-      setFormData({ title: '', description: '', price: 0 });
+      setFormData({ name: '', description: '' });
       onClose();
     }
   });
@@ -46,12 +46,12 @@ export const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose 
             )}
             
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Course Title</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Course Name</label>
               <input
                 type="text"
                 required
-                value={formData.title}
-                onChange={e => setFormData({ ...formData, title: e.target.value })}
+                value={formData.name}
+                onChange={e => setFormData({ ...formData, name: e.target.value })}
                 className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
                 placeholder="e.g. Advanced Mathematics"
               />
@@ -66,19 +66,6 @@ export const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose 
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
                 className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors resize-none"
                 placeholder="Course details..."
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Price ($)</label>
-              <input
-                type="number"
-                min="0"
-                required
-                value={formData.price}
-                onChange={e => setFormData({ ...formData, price: Number(e.target.value) })}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
-                placeholder="0"
               />
             </div>
 

@@ -5,8 +5,7 @@ import { Users, BookOpen } from 'lucide-react';
 interface BatchProps {
   batch: {
     _id: string;
-    title: string;
-    price: number;
+    name: string;
     students: string[];
     course: string;
   }
@@ -21,13 +20,10 @@ export const BatchCard: React.FC<BatchProps> = ({ batch }) => {
           <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all">
             <BookOpen className="w-6 h-6 text-indigo-400 group-hover:text-indigo-300 transition-colors" />
           </div>
-          <div className="rounded-full bg-slate-900/50 border border-slate-700 px-3 py-1 font-semibold text-slate-300 text-xs">
-            ${batch.price}
-          </div>
         </div>
         
         <h3 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors mb-2 line-clamp-1">
-          {batch.title}
+          {batch.name}
         </h3>
         
         <div className="mt-auto flex items-center mt-6 text-slate-400 text-sm font-medium">
