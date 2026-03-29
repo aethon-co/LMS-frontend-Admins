@@ -30,7 +30,7 @@ export const CourseDetails: React.FC = () => {
     return (
       <div className="min-h-screen bg-slate-950 p-8 flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-full border-4 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+          <div className="w-12 h-12 rounded-full border-4 border-blue-500/30 border-t-blue-500 animate-spin" />
           <p className="text-slate-400 font-medium tracking-wide">Loading course...</p>
         </div>
       </div>
@@ -50,7 +50,7 @@ export const CourseDetails: React.FC = () => {
       {/* Header section */}
       <div className="bg-slate-900 border-b border-slate-800 px-8 pt-8 pb-0">
         <div className="max-w-7xl mx-auto">
-          <Link to="/admin/dashboard" className="inline-flex items-center text-sm font-medium text-slate-400 hover:text-indigo-400 transition-colors mb-6">
+          <Link to="/admin/dashboard" className="inline-flex items-center text-sm font-medium text-slate-400 hover:text-blue-400 transition-colors mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Dashboard
           </Link>
@@ -63,7 +63,7 @@ export const CourseDetails: React.FC = () => {
             {activeTab === 'batches' && (
               <button
                 onClick={() => setIsAddBatchOpen(true)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-all hover:shadow-[0_0_15px_rgba(79,70,229,0.4)] whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-all hover:shadow-[0_0_15px_rgba(79,70,229,0.4)] whitespace-nowrap"
               >
                 <Plus className="h-5 w-5" />
                 Create Batch
@@ -77,7 +77,7 @@ export const CourseDetails: React.FC = () => {
               onClick={() => setActiveTab('batches')}
               className={`pb-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
                 activeTab === 'batches'
-                  ? 'border-indigo-500 text-indigo-400'
+                  ? 'border-blue-500 text-blue-400'
                   : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >
@@ -88,7 +88,7 @@ export const CourseDetails: React.FC = () => {
               onClick={() => setActiveTab('videos')}
               className={`pb-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
                 activeTab === 'videos'
-                  ? 'border-indigo-500 text-indigo-400'
+                  ? 'border-blue-500 text-blue-400'
                   : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-700'
               }`}
             >

@@ -52,14 +52,14 @@ export const AddStudentModal: React.FC<AddStudentModalProps> = ({ batchId, isOpe
           <p className="text-sm text-slate-400 mb-6">Search and select a student to enroll them.</p>
 
           <div className="relative group">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-500 group-focus-within:text-blue-400 transition-colors">
               <Search className="h-5 w-5" />
             </div>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="block w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-3 pl-10 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all sm:text-sm"
+              className="block w-full rounded-xl border border-slate-700 bg-slate-800/50 px-3 py-3 pl-10 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all sm:text-sm"
               placeholder="Search by name or email..."
             />
           </div>
@@ -74,7 +74,7 @@ export const AddStudentModal: React.FC<AddStudentModalProps> = ({ batchId, isOpe
         <div className="overflow-y-auto p-2">
           {isLoadingStudents ? (
             <div className="flex justify-center p-8">
-              <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+              <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
             </div>
           ) : filteredStudents.length === 0 ? (
             <div className="p-8 text-center text-slate-400 text-sm">
@@ -91,7 +91,7 @@ export const AddStudentModal: React.FC<AddStudentModalProps> = ({ batchId, isOpe
                   <button
                     onClick={() => addStudentMutation.mutate(student._id)}
                     disabled={addStudentMutation.isPending}
-                    className="flex p-2 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-colors border border-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex p-2 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white transition-colors border border-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Add to Batch"
                   >
                      <UserPlus className="w-4 h-4" />

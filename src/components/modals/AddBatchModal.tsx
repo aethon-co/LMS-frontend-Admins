@@ -53,7 +53,7 @@ export const AddBatchModal: React.FC<AddBatchModalProps> = ({ courseId, isOpen, 
                 required
                 value={formData.name}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
+                className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                 placeholder="e.g. Fall 2026 Morning"
               />
             </div>
@@ -69,7 +69,7 @@ export const AddBatchModal: React.FC<AddBatchModalProps> = ({ courseId, isOpen, 
               <button
                 type="submit"
                 disabled={addBatchMutation.isPending}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 text-sm font-medium text-white hover:bg-indigo-500 transition-colors focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-blue-600 text-sm font-medium text-white hover:bg-blue-500 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {addBatchMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                 Create Batch

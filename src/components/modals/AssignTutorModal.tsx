@@ -51,7 +51,7 @@ export const AssignTutorModal: React.FC<AssignTutorModalProps> = ({ batchId, isO
         <div className="overflow-y-auto p-2">
           {isLoadingTutors ? (
             <div className="flex justify-center p-8">
-              <Loader2 className="w-6 h-6 animate-spin text-indigo-500" />
+              <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
             </div>
           ) : tutors.length === 0 ? (
             <div className="p-8 text-center text-slate-400 text-sm">
@@ -68,7 +68,7 @@ export const AssignTutorModal: React.FC<AssignTutorModalProps> = ({ batchId, isO
                   <button
                     onClick={() => addTutorMutation.mutate(tutor._id)}
                     disabled={addTutorMutation.isPending}
-                    className="flex px-3 py-1.5 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-colors font-medium text-sm border border-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed group-hover:shadow-[0_0_10px_rgba(79,70,229,0.3)] gap-2"
+                    className="flex px-3 py-1.5 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white transition-colors font-medium text-sm border border-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed group-hover:shadow-[0_0_10px_rgba(79,70,229,0.3)] gap-2"
                   >
                      <UserCheck className="w-4 h-4" />
                      Assign
