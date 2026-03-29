@@ -8,8 +8,10 @@ import { Signup } from './pages/Signup';
 
 const queryClient = new QueryClient();
 
-// Placeholder components
-const AdminDashboard = () => <div className="p-8 text-center text-2xl text-blue-600">Admin Dashboard - Protected</div>;
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { CourseDetails } from './pages/admin/CourseDetails';
+import { BatchDetails } from './pages/admin/BatchDetails';
+
 const TutorDashboard = () => <div className="p-8 text-center text-2xl text-green-600">Tutor Dashboard - Protected</div>;
 const Unauthorized = () => <div className="p-8 text-center text-2xl text-red-600">Unauthorized Access</div>;
 
@@ -35,6 +37,14 @@ function App() {
         {
           path: "/admin/dashboard",
           element: <AdminDashboard />,
+        },
+        {
+          path: "/admin/course/:id",
+          element: <CourseDetails />,
+        },
+        {
+          path: "/admin/batch/:id",
+          element: <BatchDetails />,
         }
       ]
     },
