@@ -58,6 +58,10 @@ export const addTutorToBatch = (batchId: string, tutorId: string) =>
 export const getCourseLectures = (courseId: string) => fetchWithAuth(`${API_BASE}/admin/courses/${courseId}/lectures`);
 export const getLectureUploadUrl = (data: { courseId: string, fileName: string, contentType: string, title: string, description: string, order?: number }) => 
   fetchWithAuth(`${API_BASE}/admin/lectures/upload-url`, { method: 'POST', body: JSON.stringify(data) });
+export const updateCourseLecture = (lectureId: string, data: { title?: string; description?: string; order?: number }) =>
+  fetchWithAuth(`${API_BASE}/admin/lectures/${lectureId}`, { method: 'PATCH', body: JSON.stringify(data) });
+export const deleteCourseLecture = (lectureId: string) =>
+  fetchWithAuth(`${API_BASE}/admin/lectures/${lectureId}`, { method: 'DELETE' });
 
 export const uploadFileToS3 = async (url: string, file: File, onProgress?: (pct: number) => void) => {
   return new Promise((resolve, reject) => {
@@ -80,7 +84,56 @@ export const uploadFileToS3 = async (url: string, file: File, onProgress?: (pct:
       }
     };
     
-    xhr.onerror = () => reject(new Error('S3 Upload failed to process'));
+    xhr.onerror = () => reject(new Error('Direct S3 upload was blocked by the browser or network'));
+    xhr.send(file);
+  });
+};
+
+export const uploadLectureViaApi = async (
+  lectureId: string,
+  file: File,
+  onProgress?: (pct: number) => void
+) => {
+  const token = getAuthToken();
+
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('No token found');
+  }
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', `${API_BASE}/admin/lectures/${lectureId}/upload`, true);
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && onProgress) {
+        const percentComplete = (e.loaded / e.total) * 100;
+        onProgress(Math.round(percentComplete));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(true);
+      } else if (xhr.status === 401) {
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.href = '/login';
+        reject(new Error('Token expired or unauthorized'));
+      } else {
+        try {
+          const response = JSON.parse(xhr.responseText);
+          reject(new Error(response.message || 'Backend upload failed'));
+        } catch {
+          reject(new Error(`Backend upload failed with status ${xhr.status}`));
+        }
+      }
+    };
+
+    xhr.onerror = () => reject(new Error('Backend upload failed to process'));
     xhr.send(file);
   });
 };
@@ -89,12 +142,24 @@ export const uploadFileToS3 = async (url: string, file: File, onProgress?: (pct:
 export const getAllStudents = () => fetchWithAuth(`${API_BASE}/admin/students`);
 export const getAllTutors = () => fetchWithAuth(`${API_BASE}/admin/tutors`);
 
+// Student Video Progress (for admin & tutor)
+export const getBatchStudentVideoProgress = (batchId: string) =>
+  fetchWithAuth(`${API_BASE}/admin/batches/${batchId}/student-video-progress`);
+
 // Tutor Endpoints
 export const getTutorBatches = () => fetchWithAuth(`${API_BASE}/tutor/batches`);
 export const getTutorBatchById = (id: string) => fetchWithAuth(`${API_BASE}/tutor/batches/${id}`);
 export const getTutorBatchAssignments = (batchId: string) => fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/assignments`);
 export const createTutorAssignment = (batchId: string, data: { name: string, description: string, dueDate: string, maxMarks: number }) => 
   fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/assignments`, { method: 'POST', body: JSON.stringify({ ...data, batch: batchId }) });
+export const updateTutorAssignment = (batchId: string, assignmentId: string, data: { name?: string; description?: string; dueDate?: string; maxMarks?: number }) =>
+  fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/assignments/${assignmentId}`, { method: 'PATCH', body: JSON.stringify(data) });
+export const deleteTutorAssignment = (batchId: string, assignmentId: string) =>
+  fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/assignments/${assignmentId}`, { method: 'DELETE' });
+
+// Tutor Student Video Progress
+export const getTutorBatchStudentVideoProgress = (batchId: string) =>
+  fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/student-video-progress`);
 
 // Tutor Attendance
 export const getTutorBatchSessions = (batchId: string, date?: string) => {

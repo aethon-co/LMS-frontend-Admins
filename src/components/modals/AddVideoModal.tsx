@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { X, Loader2, UploadCloud, FileVideo } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { getLectureUploadUrl, uploadFileToS3 } from '../../api';
+import { deleteCourseLecture, getLectureUploadUrl, uploadFileToS3, uploadLectureViaApi } from '../../api';
 
 interface AddVideoModalProps {
   courseId: string;
@@ -21,7 +21,7 @@ export const AddVideoModal: React.FC<AddVideoModalProps> = ({ courseId, isOpen, 
       if (!file) throw new Error("Please select a video file.");
       
       // 1. Get presigned URL and save metadata
-      const { uploadUrl } = await getLectureUploadUrl({
+      const { uploadUrl, lecture } = await getLectureUploadUrl({
         courseId,
         fileName: file.name,
         contentType: file.type,
@@ -30,8 +30,17 @@ export const AddVideoModal: React.FC<AddVideoModalProps> = ({ courseId, isOpen, 
         order: formData.order,
       });
 
-      // 2. Upload to S3 directly
-      await uploadFileToS3(uploadUrl, file, (pct) => setUploadProgress(pct));
+      // 2. Prefer direct-to-S3 upload, but fall back to the backend if the browser blocks it.
+      try {
+        await uploadFileToS3(uploadUrl, file, (pct) => setUploadProgress(pct));
+      } catch (directUploadError) {
+        try {
+          await uploadLectureViaApi(lecture._id, file, (pct) => setUploadProgress(pct));
+        } catch (fallbackError) {
+          await deleteCourseLecture(lecture._id).catch(() => null);
+          throw fallbackError instanceof Error ? fallbackError : directUploadError;
+        }
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['course-lectures', courseId] });
