@@ -13,6 +13,7 @@ import { CourseDetails } from './pages/admin/CourseDetails';
 import { BatchDetails } from './pages/admin/BatchDetails';
 import { TutorDashboard } from './pages/tutor/TutorDashboard';
 import { TutorBatchDetails } from './pages/tutor/TutorBatchDetails';
+import { DashboardLayout } from './components/layout/DashboardLayout';
 
 const Unauthorized = () => <div className="p-8 text-center text-2xl text-red-600">Unauthorized Access</div>;
 
@@ -43,16 +44,21 @@ function App() {
       element: <ProtectedRoute allowedRoles={['admin']} />,
       children: [
         {
-          path: "/admin/dashboard",
-          element: <AdminDashboard />,
-        },
-        {
-          path: "/admin/course/:id",
-          element: <CourseDetails />,
-        },
-        {
-          path: "/admin/batch/:id",
-          element: <BatchDetails />,
+          element: <DashboardLayout />,
+          children: [
+            {
+              path: "/admin/dashboard",
+              element: <AdminDashboard />,
+            },
+            {
+              path: "/admin/course/:id",
+              element: <CourseDetails />,
+            },
+            {
+              path: "/admin/batch/:id",
+              element: <BatchDetails />,
+            }
+          ]
         }
       ]
     },
@@ -61,12 +67,17 @@ function App() {
       element: <ProtectedRoute allowedRoles={['tutor']} />,
       children: [
         {
-          path: "/tutor/dashboard",
-          element: <TutorDashboard />,
-        },
-        {
-          path: "/tutor/batch/:id",
-          element: <TutorBatchDetails />,
+          element: <DashboardLayout />,
+          children: [
+            {
+              path: "/tutor/dashboard",
+              element: <TutorDashboard />,
+            },
+            {
+              path: "/tutor/batch/:id",
+              element: <TutorBatchDetails />,
+            }
+          ]
         }
       ]
     },

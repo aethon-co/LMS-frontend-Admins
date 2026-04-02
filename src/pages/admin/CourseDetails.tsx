@@ -78,10 +78,10 @@ export const CourseDetails: React.FC = () => {
 
   if (isLoadingCourse) {
     return (
-      <div className="min-h-screen bg-slate-950 p-8 flex items-center justify-center">
+      <div className="flex items-center justify-center p-12">
         <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="w-12 h-12 rounded-full border-4 border-blue-500/30 border-t-blue-500 animate-spin" />
-          <p className="text-slate-400 font-medium tracking-wide">Loading course...</p>
+          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+          <p className="text-slate-500 dark:text-[#8b95a2] font-medium">Loading course...</p>
         </div>
       </div>
     );
@@ -89,143 +89,141 @@ export const CourseDetails: React.FC = () => {
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-slate-950 p-8 flex items-center justify-center text-red-400">
+      <div className="flex items-center justify-center p-12 text-red-600 dark:text-[#ef4444] font-medium">
         Course not found
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 font-sans text-slate-100">
+    <div className="font-sans text-slate-900 dark:text-[#f0f2f5] animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header section */}
-      <div className="bg-slate-900 border-b border-slate-800 px-8 pt-8 pb-0">
-        <div className="max-w-7xl mx-auto">
-          <Link to="/admin/dashboard" className="inline-flex items-center text-sm font-medium text-slate-400 hover:text-blue-400 transition-colors mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
-          </Link>
+      <div className="border-b border-slate-200 dark:border-[#242830] pb-6 mb-8">
+        <Link to="/admin/dashboard" className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors mb-4">
+          <ArrowLeft className="w-4 h-4 mr-1.5" />
+          Back to Dashboard
+        </Link>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-            <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-white mb-2">{course.name}</h1>
-              <p className="text-lg text-slate-400 max-w-2xl">{course.description}</p>
-            </div>
-            {activeTab === 'batches' && (
-              <button
-                onClick={() => setIsAddBatchOpen(true)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-all hover:shadow-[0_0_15px_rgba(79,70,229,0.4)] whitespace-nowrap"
-              >
-                <Plus className="h-5 w-5" />
-                Create Batch
-              </button>
-            )}
-            {activeTab === 'videos' && (
-              <button
-                onClick={() => setIsAddVideoOpen(true)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-all hover:shadow-[0_0_15px_rgba(79,70,229,0.4)] whitespace-nowrap"
-              >
-                <Plus className="h-5 w-5" />
-                Upload Video
-              </button>
-            )}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <div>
+            <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-[#f0f2f5] mb-2">{course.name}</h1>
+            <p className="text-base text-slate-500 dark:text-[#8b95a2] max-w-2xl">{course.description}</p>
           </div>
+          {activeTab === 'batches' && (
+            <button
+              onClick={() => setIsAddBatchOpen(true)}
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition-all dark:hover:bg-blue-500 whitespace-nowrap"
+            >
+              <Plus className="h-4 w-4" />
+              Create Batch
+            </button>
+          )}
+          {activeTab === 'videos' && (
+            <button
+              onClick={() => setIsAddVideoOpen(true)}
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 transition-all dark:hover:bg-blue-500 whitespace-nowrap"
+            >
+              <Plus className="h-4 w-4" />
+              Upload Video
+            </button>
+          )}
+        </div>
 
-          {/* Tabs */}
-          <div className="flex space-x-8">
-            <button
-              onClick={() => setActiveTab('batches')}
-              className={`pb-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
-                activeTab === 'batches'
-                  ? 'border-blue-500 text-blue-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-700'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              Batches
-            </button>
-            <button
-              onClick={() => setActiveTab('videos')}
-              className={`pb-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
-                activeTab === 'videos'
-                  ? 'border-blue-500 text-blue-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-300 hover:border-slate-700'
-              }`}
-            >
-              <PlayCircle className="w-4 h-4" />
-              Videos
-            </button>
-          </div>
+        {/* Tabs */}
+        <div className="flex space-x-6 h-full">
+          <button
+            onClick={() => setActiveTab('batches')}
+            className={`pb-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
+              activeTab === 'batches'
+                ? 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400'
+                : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-[#8b95a2] dark:hover:text-white'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            Batches
+          </button>
+          <button
+            onClick={() => setActiveTab('videos')}
+            className={`pb-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
+              activeTab === 'videos'
+                ? 'border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-400'
+                : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-[#8b95a2] dark:hover:text-white'
+            }`}
+          >
+            <PlayCircle className="w-4 h-4" />
+            Videos
+          </button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto p-8">
+      <div>
         {activeTab === 'videos' ? (
           <div>
             {isLoadingLectures ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
+              <div className="grid grid-cols-1 gap-4 opacity-50">
                 {[1, 2, 3].map(n => (
-                  <div key={n} className="h-[120px] rounded-2xl bg-slate-800/50 animate-pulse" />
+                  <div key={n} className="h-24 rounded-xl bg-slate-100 dark:bg-[#13151a] border border-slate-200 dark:border-[#242830] animate-pulse" />
                 ))}
               </div>
             ) : lectures.length === 0 ? (
-              <div className="rounded-2xl border border-slate-700/50 bg-slate-800/20 p-12 text-center flex flex-col items-center justify-center">
-                <Video className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-200">No videos uploaded</h3>
-                <p className="mt-2 text-sm text-slate-400 max-w-sm mx-auto">Click "Upload Video" to add your first lecture to this course.</p>
+              <div className="rounded-xl border border-dashed border-slate-300 dark:border-[#242830] bg-slate-50 dark:bg-[#1a1d24] p-12 text-center flex flex-col items-center justify-center">
+                <Video className="w-10 h-10 text-slate-400 dark:text-[#5a6474] mb-3" />
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">No videos uploaded</h3>
+                <p className="mt-1 text-sm text-slate-500 dark:text-[#8b95a2] max-w-sm mx-auto">Click "Upload Video" to add your first lecture to this course.</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
                 {lectures.map((lecture: any) => (
-                  <div key={lecture._id} className="group rounded-2xl bg-slate-800/50 border border-slate-700/50 transition-all hover:border-blue-500/30 overflow-hidden">
+                  <div key={lecture._id} className="group rounded-xl bg-white dark:bg-[#13151a] border border-slate-200 dark:border-[#242830] transition-all hover:border-slate-300 dark:hover:border-[#5a6474] flex flex-col overflow-hidden">
                     {editingLectureId === lecture._id ? (
                       /* ── Inline Edit Form ── */
-                      <div className="p-6 space-y-4 bg-slate-900/60">
+                      <div className="p-5 space-y-4 bg-slate-50 dark:bg-[#1a1d24]">
                         <div className="flex items-center justify-between mb-1">
-                          <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Edit Lecture</h4>
-                          <button onClick={() => setEditingLectureId(null)} className="text-slate-500 hover:text-slate-200 transition-colors">
+                          <h4 className="text-xs font-bold text-slate-500 dark:text-[#8b95a2] uppercase tracking-wider">Edit Lecture</h4>
+                          <button onClick={() => setEditingLectureId(null)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
                             <X className="w-4 h-4" />
                           </button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div className="md:col-span-2">
-                            <label className="text-xs font-medium text-slate-400 mb-1 block">Title</label>
+                            <label className="text-xs font-medium text-slate-700 dark:text-[#8b95a2] mb-1.5 block">Title</label>
                             <input
                               value={editTitle}
                               onChange={e => setEditTitle(e.target.value)}
-                              className="w-full rounded-lg bg-slate-800 border border-slate-600 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
+                              className="w-full rounded-md bg-white dark:bg-[#13151a] border border-slate-300 dark:border-[#242830] px-3 py-2 text-sm text-slate-900 dark:text-[#f0f2f5] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                             />
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-slate-400 mb-1 block">Order</label>
+                            <label className="text-xs font-medium text-slate-700 dark:text-[#8b95a2] mb-1.5 block">Order</label>
                             <input
                               type="number"
                               value={editOrder}
                               onChange={e => setEditOrder(Number(e.target.value))}
-                              className="w-full rounded-lg bg-slate-800 border border-slate-600 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
+                              className="w-full rounded-md bg-white dark:bg-[#13151a] border border-slate-300 dark:border-[#242830] px-3 py-2 text-sm text-slate-900 dark:text-[#f0f2f5] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
                             />
                           </div>
                         </div>
                         <div>
-                          <label className="text-xs font-medium text-slate-400 mb-1 block">Description</label>
+                          <label className="text-xs font-medium text-slate-700 dark:text-[#8b95a2] mb-1.5 block">Description</label>
                           <textarea
                             value={editDescription}
                             onChange={e => setEditDescription(e.target.value)}
                             rows={2}
-                            className="w-full rounded-lg bg-slate-800 border border-slate-600 px-3 py-2 text-sm text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors resize-none"
+                            className="w-full rounded-md bg-white dark:bg-[#13151a] border border-slate-300 dark:border-[#242830] px-3 py-2 text-sm text-slate-900 dark:text-[#f0f2f5] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors resize-none"
                           />
                         </div>
-                        <div className="flex gap-3 justify-end">
+                        <div className="flex gap-2 justify-end pt-2">
                           <button
                             onClick={() => setEditingLectureId(null)}
-                            className="px-4 py-2 rounded-xl text-sm font-semibold border border-slate-600 text-slate-300 hover:bg-slate-700 transition-colors"
+                            className="px-3 py-1.5 rounded-md text-sm font-medium border border-slate-300 dark:border-[#242830] text-slate-700 dark:text-[#f0f2f5] hover:bg-slate-50 dark:hover:bg-[#242830] transition-colors"
                           >
                             Cancel
                           </button>
                           <button
                             onClick={saveEdit}
                             disabled={updateMutation.isPending}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors disabled:opacity-50"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white transition-colors disabled:opacity-50"
                           >
                             {updateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                             Save
@@ -234,51 +232,52 @@ export const CourseDetails: React.FC = () => {
                       </div>
                     ) : deletingLectureId === lecture._id ? (
                       /* ── Delete Confirm ── */
-                      <div className="p-6 flex items-center justify-between bg-red-950/30 border-red-500/20">
+                      <div className="p-5 flex items-center justify-between bg-red-50 dark:bg-[#2d0f0f] border-b border-red-100 dark:border-[#7f1d1d]">
                         <div>
-                          <p className="font-semibold text-red-300">Delete "{lecture.title}"?</p>
-                          <p className="text-xs text-red-400/70 mt-0.5">This action cannot be undone.</p>
+                          <p className="font-medium text-sm text-red-900 dark:text-red-300 flex items-center gap-2">
+                            <Trash2 className="w-4 h-4" /> Delete "{lecture.title}"?
+                          </p>
+                          <p className="text-xs text-red-700 dark:text-red-400/80 mt-1">This action cannot be undone and will remove video from storage.</p>
                         </div>
-                        <div className="flex gap-3">
-                          <button onClick={() => setDeletingLectureId(null)} className="px-4 py-2 rounded-xl text-sm font-semibold border border-slate-600 text-slate-300 hover:bg-slate-700 transition-colors">
+                        <div className="flex gap-2">
+                          <button onClick={() => setDeletingLectureId(null)} className="px-3 py-1.5 rounded-md text-xs font-medium border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition-colors">
                             Cancel
                           </button>
                           <button
                             onClick={() => deleteMutation.mutate(lecture._id)}
                             disabled={deleteMutation.isPending}
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-red-600 hover:bg-red-500 text-white transition-colors disabled:opacity-50"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-red-600 hover:bg-red-700 text-white transition-colors disabled:opacity-50"
                           >
-                            {deleteMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                            Delete
+                            {deleteMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Confirm'}
                           </button>
                         </div>
                       </div>
                     ) : (
                       /* ── Normal View ── */
-                      <div className="p-5 flex items-start gap-4">
-                        <div className="w-12 h-12 shrink-0 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                          <PlayCircle className="w-6 h-6 text-blue-400 group-hover:scale-110 transition-transform" />
+                      <div className="p-4 flex items-start gap-4">
+                        <div className="w-10 h-10 shrink-0 rounded-lg bg-slate-100 dark:bg-[#1a1d24] flex items-center justify-center">
+                          <PlayCircle className="w-5 h-5 text-slate-400 dark:text-[#5a6474]" />
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
+                        <div className="min-w-0 flex-1 pt-0.5">
+                          <div className="flex items-center gap-2 mb-1">
                             {lecture.order !== undefined && (
-                              <span className="text-xs font-bold text-slate-500">#{lecture.order}</span>
+                              <span className="text-[10px] font-bold text-slate-500 bg-slate-100 dark:bg-[#1a1d24] dark:text-[#8b95a2] px-1.5 py-0.5 rounded">#{lecture.order}</span>
                             )}
-                            <h4 className="text-lg font-semibold text-slate-200 truncate group-hover:text-white transition-colors">{lecture.title}</h4>
+                            <h4 className="text-sm font-medium text-slate-900 dark:text-[#f0f2f5] truncate">{lecture.title}</h4>
                           </div>
-                          <p className="mt-1 text-sm text-slate-400 line-clamp-2">{lecture.description}</p>
+                          <p className="text-xs text-slate-500 dark:text-[#8b95a2] line-clamp-1">{lecture.description}</p>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => startEdit(lecture)}
-                            className="p-2 rounded-lg bg-slate-700/50 hover:bg-blue-500/20 hover:text-blue-400 text-slate-400 transition-colors border border-slate-600/50"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:text-blue-400 dark:hover:bg-[#1e2a3d] transition-colors"
                             title="Edit lecture"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => setDeletingLectureId(lecture._id)}
-                            className="p-2 rounded-lg bg-slate-700/50 hover:bg-red-500/20 hover:text-red-400 text-slate-400 transition-colors border border-slate-600/50"
+                            className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:text-red-400 dark:hover:bg-[#2d0f0f] transition-colors"
                             title="Delete lecture"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -294,16 +293,16 @@ export const CourseDetails: React.FC = () => {
         ) : (
           <div>
             {isLoadingBatches ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-50">
                 {[1, 2, 3].map(n => (
-                  <div key={n} className="h-[200px] rounded-2xl bg-slate-800/50 animate-pulse" />
+                  <div key={n} className="h-40 rounded-xl bg-slate-100 dark:bg-[#13151a] border border-slate-200 dark:border-[#242830] animate-pulse" />
                 ))}
               </div>
             ) : batches.length === 0 ? (
-              <div className="rounded-2xl border border-slate-700/50 bg-slate-800/20 p-12 text-center flex flex-col items-center justify-center">
-                <Users className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-200">No batches created</h3>
-                <p className="mt-2 text-sm text-slate-400 max-w-sm mx-auto">Create a batch to start organizing students and tutors for this course.</p>
+              <div className="rounded-xl border border-dashed border-slate-300 dark:border-[#242830] bg-slate-50 dark:bg-[#1a1d24] p-12 text-center flex flex-col items-center justify-center">
+                <Users className="w-10 h-10 text-slate-400 dark:text-[#5a6474] mb-3" />
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-[#f0f2f5]">No batches created</h3>
+                <p className="mt-1 text-sm text-slate-500 dark:text-[#8b95a2] max-w-sm mx-auto">Create a batch to start organizing students and tutors for this course.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

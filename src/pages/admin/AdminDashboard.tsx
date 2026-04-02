@@ -12,52 +12,48 @@ export const AdminDashboard: React.FC = () => {
     queryFn: getCourses,
   });
 
-  // Extract the actual courses array. Depending on the backend route response, it might be in data.courses or just data.
-  // Assuming data.courses based on Mongoose .find() norms.
   const courses = data?.courses || [];
 
   return (
-    <div className="min-h-screen bg-slate-950 p-8 font-sans text-slate-100">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header Options */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Courses</h1>
-            <p className="mt-1 text-sm text-slate-400">Manage all application curriculum streams.</p>
-          </div>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 transition-all hover:shadow-[0_0_15px_rgba(79,70,229,0.4)]"
-          >
-            <Plus className="h-5 w-5" />
-            Add Course
-          </button>
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 font-sans">
+      {/* Header Options */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#242830] pb-6">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-[#f0f2f5]">Courses</h1>
+          <p className="mt-1 text-slate-500 dark:text-[#8b95a2]">Manage all application curriculum streams.</p>
         </div>
-
-        {/* Courses Grid */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 opacity-60">
-            {[1, 2, 3, 4].map(n => (
-              <div key={n} className="h-[320px] rounded-2xl bg-slate-800/50 animate-pulse" />
-            ))}
-          </div>
-        ) : isError ? (
-          <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-6 text-center text-red-400">
-            <p>Failed to load courses. {(error as Error).message}</p>
-          </div>
-        ) : courses.length === 0 ? (
-          <div className="rounded-2xl border border-slate-700/50 bg-slate-800/20 p-12 text-center flex flex-col items-center justify-center">
-            <h3 className="text-xl font-semibold text-slate-200">No courses yet</h3>
-            <p className="mt-2 text-sm text-slate-400 max-w-sm mx-auto">Get started by creating your first course and establishing the foundation for future batches.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {courses.map((course: any) => (
-              <CourseCard key={course._id} course={course} />
-            ))}
-          </div>
-        )}
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-all dark:bg-blue-600 dark:hover:bg-blue-500"
+        >
+          <Plus className="h-4 w-4" />
+          Add Course
+        </button>
       </div>
+
+      {/* Courses Grid */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 opacity-50">
+          {[1, 2, 3, 4].map(n => (
+            <div key={n} className="h-[250px] rounded-xl bg-slate-100 dark:bg-[#13151a] border border-slate-200 dark:border-[#242830] animate-pulse" />
+          ))}
+        </div>
+      ) : isError ? (
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-red-800 dark:border-[#7f1d1d] dark:bg-[#2d0f0f] dark:text-[#fecaca] text-sm font-medium">
+          Failed to load courses. {(error as Error).message}
+        </div>
+      ) : courses.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-slate-300 dark:border-[#242830] bg-slate-50 dark:bg-[#1a1d24] p-16 text-center flex flex-col items-center justify-center">
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">No courses yet</h3>
+          <p className="mt-1 text-sm text-slate-500 dark:text-[#8b95a2] max-w-sm mx-auto">Get started by creating your first course and establishing the foundation for future batches.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {courses.map((course: any) => (
+            <CourseCard key={course._id} course={course} />
+          ))}
+        </div>
+      )}
 
       <AddCourseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>

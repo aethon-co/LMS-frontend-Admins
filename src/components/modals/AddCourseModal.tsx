@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, BookOpen } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { createCourse } from '../../api';
@@ -34,58 +34,64 @@ export const AddCourseModal: React.FC<AddCourseModalProps> = ({ isOpen, onClose 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-lg bg-slate-900 rounded-2xl border border-slate-700/50 shadow-2xl relative animate-in zoom-in-95">
-        <button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors rounded-full hover:bg-slate-800">
-          <X className="w-5 h-5" />
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-black/60 backdrop-blur-sm animate-in fade-in font-sans">
+      <div className="w-full max-w-md bg-white dark:bg-[#1a1d24] rounded-2xl shadow-xl border border-slate-200 dark:border-[#242830] overflow-hidden relative animate-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-[#242830]">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-[#1e2a3d] flex items-center justify-center border border-blue-100 dark:border-[#2d4a7a]">
+              <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-[#f0f2f5]">Create New Course</h2>
+          </div>
+          <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors rounded-lg hover:bg-slate-50 dark:hover:bg-[#242830]">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
         
-        <div className="p-6 sm:p-8">
-          <h2 className="text-2xl font-bold text-white mb-6">Create New Course</h2>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {addCourseMutation.isError && (
-               <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+               <div className="p-3 bg-red-50 dark:bg-[#2d0f0f] border border-red-200 dark:border-[#7f1d1d] rounded-lg text-red-600 dark:text-[#ef4444] text-sm">
                  {addCourseMutation.error instanceof Error ? addCourseMutation.error.message : 'Error creating course'}
                </div>
             )}
             
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Course Name</label>
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-[#8b95a2]">Course Name</label>
               <input
                 type="text"
                 required
                 value={formData.name}
                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"
+                className="w-full rounded-lg border border-slate-300 dark:border-[#242830] bg-white dark:bg-[#13151a] px-3 py-2.5 text-slate-900 dark:text-[#f0f2f5] placeholder-slate-400 dark:placeholder-[#5a6474] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors text-sm"
                 placeholder="e.g. Advanced Mathematics"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Description</label>
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-slate-700 dark:text-[#8b95a2]">Description</label>
               <textarea
                 required
                 rows={3}
                 value={formData.description}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
-                className="w-full rounded-xl border border-slate-700 bg-slate-800/50 px-4 py-2.5 text-slate-200 placeholder-slate-500 focus:border-blue-500 focus:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors resize-none"
+                className="w-full rounded-lg border border-slate-300 dark:border-[#242830] bg-white dark:bg-[#13151a] px-3 py-2.5 text-slate-900 dark:text-[#f0f2f5] placeholder-slate-400 dark:placeholder-[#5a6474] focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors resize-none text-sm"
                 placeholder="Course details..."
               />
             </div>
 
-            <div className="pt-4 flex justify-end gap-3">
+            <div className="pt-2 flex justify-end gap-3">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-[#f0f2f5] border border-slate-300 dark:border-[#383e4a] hover:bg-slate-50 dark:hover:bg-[#242830] transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={addCourseMutation.isPending}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-blue-600 text-sm font-medium text-white hover:bg-blue-500 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {addCourseMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                 Create Course
