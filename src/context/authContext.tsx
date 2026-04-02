@@ -48,12 +48,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUser = getCookie('user');
 
     if (storedToken && storedRole && storedUser) {
-      setToken(storedToken);
-      setRole(storedRole);
+      let isExpired = false;
       try {
-        setUser(JSON.parse(storedUser));
+        const payload = JSON.parse(atob(storedToken.split('.')[1]));
+        if (payload.exp && payload.exp * 1000 < Date.now()) {
+          isExpired = true;
+        }
       } catch (e) {
-        console.error('Failed to parse user data from cookie', e);
+        isExpired = true;
+      }
+
+      if (isExpired) {
+        removeCookie('token');
+        removeCookie('role');
+        removeCookie('user');
+        setToken(null);
+        setRole(null);
+        setUser(null);
+      } else {
+        setToken(storedToken);
+        setRole(storedRole);
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          console.error('Failed to parse user data from cookie', e);
+        }
       }
     }
     setIsLoading(false);

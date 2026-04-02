@@ -1,7 +1,7 @@
 import './App.css'
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from './context/authContext';
+import { AuthProvider, useAuth } from './context/authContext';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
@@ -11,9 +11,17 @@ const queryClient = new QueryClient();
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { CourseDetails } from './pages/admin/CourseDetails';
 import { BatchDetails } from './pages/admin/BatchDetails';
+import { TutorDashboard } from './pages/tutor/TutorDashboard';
+import { TutorBatchDetails } from './pages/tutor/TutorBatchDetails';
 
-const TutorDashboard = () => <div className="p-8 text-center text-2xl text-green-600">Tutor Dashboard - Protected</div>;
 const Unauthorized = () => <div className="p-8 text-center text-2xl text-red-600">Unauthorized Access</div>;
+
+const HomeRedirect = () => {
+  const { role } = useAuth();
+  if (role === 'admin') return <Navigate to="/admin/dashboard" replace />;
+  if (role === 'tutor') return <Navigate to="/tutor/dashboard" replace />;
+  return <div className="p-8 text-center text-2xl">Must be logged in</div>;
+};
 
 function App() {
 
@@ -55,6 +63,10 @@ function App() {
         {
           path: "/tutor/dashboard",
           element: <TutorDashboard />,
+        },
+        {
+          path: "/tutor/batch/:id",
+          element: <TutorBatchDetails />,
         }
       ]
     },
@@ -64,7 +76,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <div className="p-8 text-center text-2xl">Home - Must be logged in</div>,
+          element: <HomeRedirect />,
         }
       ]
     }

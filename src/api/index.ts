@@ -7,13 +7,28 @@ export const getAuthToken = () => {
 
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = getAuthToken();
+  
+  if (!token) {
+    window.location.href = '/login';
+    throw new Error('No token found');
+  }
+
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+    'Authorization': `Bearer ${token}`,
     ...options.headers,
   };
 
   const response = await fetch(url, { ...options, headers });
+  
+  if (response.status === 401) {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = '/login';
+    throw new Error('Token expired or unauthorized');
+  }
+
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
     throw new Error(err.message || 'API Error');
@@ -39,6 +54,57 @@ export const addStudentToBatch = (batchId: string, studentId: string) =>
 export const addTutorToBatch = (batchId: string, tutorId: string) => 
   fetchWithAuth(`${API_BASE}/admin/batches/${batchId}/add-tutor`, { method: 'POST', body: JSON.stringify({ tutorId }) });
 
+// Lectures & S3
+export const getCourseLectures = (courseId: string) => fetchWithAuth(`${API_BASE}/admin/courses/${courseId}/lectures`);
+export const getLectureUploadUrl = (data: { courseId: string, fileName: string, contentType: string, title: string, description: string, order?: number }) => 
+  fetchWithAuth(`${API_BASE}/admin/lectures/upload-url`, { method: 'POST', body: JSON.stringify(data) });
+
+export const uploadFileToS3 = async (url: string, file: File, onProgress?: (pct: number) => void) => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', url, true);
+    xhr.setRequestHeader('Content-Type', file.type);
+    
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && onProgress) {
+        const percentComplete = (e.loaded / e.total) * 100;
+        onProgress(Math.round(percentComplete));
+      }
+    };
+    
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(true);
+      } else {
+        reject(new Error(`S3 Upload failed with status ${xhr.status}`));
+      }
+    };
+    
+    xhr.onerror = () => reject(new Error('S3 Upload failed to process'));
+    xhr.send(file);
+  });
+};
+
 // Users (Students & Tutors)
 export const getAllStudents = () => fetchWithAuth(`${API_BASE}/admin/students`);
 export const getAllTutors = () => fetchWithAuth(`${API_BASE}/admin/tutors`);
+
+// Tutor Endpoints
+export const getTutorBatches = () => fetchWithAuth(`${API_BASE}/tutor/batches`);
+export const getTutorBatchById = (id: string) => fetchWithAuth(`${API_BASE}/tutor/batches/${id}`);
+export const getTutorBatchAssignments = (batchId: string) => fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/assignments`);
+export const createTutorAssignment = (batchId: string, data: { name: string, description: string, dueDate: string, maxMarks: number }) => 
+  fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/assignments`, { method: 'POST', body: JSON.stringify({ ...data, batch: batchId }) });
+
+// Tutor Attendance
+export const getTutorBatchSessions = (batchId: string, date?: string) => {
+  const url = date 
+    ? `${API_BASE}/tutor/batches/${batchId}/sessions?date=${date}` 
+    : `${API_BASE}/tutor/batches/${batchId}/sessions`;
+  return fetchWithAuth(url);
+};
+export const createTutorClassSession = (batchId: string) => 
+  fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/sessions`, { method: 'POST' });
+export const updateTutorAttendance = (batchId: string, sessionId: string, studentId: string, status: string) => 
+  fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/sessions/${sessionId}`, { method: 'PATCH', body: JSON.stringify({ studentId, status }) });
+export const getBatchStudentStats = (batchId: string) => fetchWithAuth(`${API_BASE}/tutor/batches/${batchId}/student-stats`);

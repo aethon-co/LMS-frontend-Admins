@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Plus, PlayCircle, Users } from 'lucide-react';
-import { getCourseById, getBatchByCourse } from '../../api';
+import { ArrowLeft, Plus, PlayCircle, Users, Video } from 'lucide-react';
+import { getCourseById, getBatchByCourse, getCourseLectures } from '../../api';
 import { AddBatchModal } from '../../components/modals/AddBatchModal';
+import { AddVideoModal } from '../../components/modals/AddVideoModal';
 import { BatchCard } from '../../components/cards/BatchCard';
 
 export const CourseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState<'batches' | 'videos'>('batches');
   const [isAddBatchOpen, setIsAddBatchOpen] = useState(false);
+  const [isAddVideoOpen, setIsAddVideoOpen] = useState(false);
 
   const { data: courseData, isLoading: isLoadingCourse } = useQuery({
     queryKey: ['course', id],
@@ -23,8 +25,15 @@ export const CourseDetails: React.FC = () => {
     enabled: !!id,
   });
 
+  const { data: lecturesData, isLoading: isLoadingLectures } = useQuery({
+    queryKey: ['course-lectures', id],
+    queryFn: () => getCourseLectures(id!),
+    enabled: !!id,
+  });
+
   const course = courseData?.course || null;
   const batches = batchesData?.batches || [];
+  const lectures = lecturesData?.lectures || [];
 
   if (isLoadingCourse) {
     return (
@@ -69,6 +78,15 @@ export const CourseDetails: React.FC = () => {
                 Create Batch
               </button>
             )}
+            {activeTab === 'videos' && (
+              <button
+                onClick={() => setIsAddVideoOpen(true)}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-all hover:shadow-[0_0_15px_rgba(79,70,229,0.4)] whitespace-nowrap"
+              >
+                <Plus className="h-5 w-5" />
+                Upload Video
+              </button>
+            )}
           </div>
 
           {/* Tabs */}
@@ -102,10 +120,36 @@ export const CourseDetails: React.FC = () => {
       {/* Content */}
       <div className="max-w-7xl mx-auto p-8">
         {activeTab === 'videos' ? (
-          <div className="rounded-2xl border border-slate-700/50 bg-slate-800/20 p-12 text-center">
-            <PlayCircle className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-slate-200">Video Content</h3>
-            <p className="mt-2 text-sm text-slate-400">Video management coming soon.</p>
+          <div>
+            {isLoadingLectures ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-60">
+                {[1, 2, 3].map(n => (
+                  <div key={n} className="h-[120px] rounded-2xl bg-slate-800/50 animate-pulse" />
+                ))}
+              </div>
+            ) : lectures.length === 0 ? (
+              <div className="rounded-2xl border border-slate-700/50 bg-slate-800/20 p-12 text-center flex flex-col items-center justify-center">
+                <Video className="w-12 h-12 text-slate-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-slate-200">No videos uploaded</h3>
+                <p className="mt-2 text-sm text-slate-400 max-w-sm mx-auto">Click "Upload Video" to add your first lecture to this course.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {lectures.map((lecture: any) => (
+                  <div key={lecture._id} className="group overflow-hidden rounded-2xl bg-slate-800/50 border border-slate-700/50 shadow-sm transition-all hover:border-blue-500/50 hover:shadow-lg flex flex-col p-5">
+                     <div className="flex items-start gap-4">
+                       <div className="w-12 h-12 shrink-0 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                         <PlayCircle className="w-6 h-6 text-blue-400 group-hover:scale-110 transition-transform" />
+                       </div>
+                       <div className="min-w-0 flex-1">
+                         <h4 className="text-lg font-semibold text-slate-200 truncate group-hover:text-white transition-colors">{lecture.title}</h4>
+                         <p className="mt-1 text-sm text-slate-400 line-clamp-2">{lecture.description}</p>
+                       </div>
+                     </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <div>
@@ -133,6 +177,7 @@ export const CourseDetails: React.FC = () => {
       </div>
 
       <AddBatchModal courseId={id!} isOpen={isAddBatchOpen} onClose={() => setIsAddBatchOpen(false)} />
+      <AddVideoModal courseId={id!} isOpen={isAddVideoOpen} onClose={() => setIsAddVideoOpen(false)} />
     </div>
   );
 };
