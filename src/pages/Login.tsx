@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth, type Role } from '../context/authContext';
-import { Mail, Lock, Shield, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
 export const Login: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -185,8 +185,7 @@ export const Login: React.FC = () => {
         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
         <div className="z-10 flex w-full justify-end">
           <div className="flex items-center gap-2 text-2xl font-bold tracking-tight text-white">
-            <Shield className="h-8 w-8 text-blue-400" />
-            LogicBox LMS
+            <img src="/logo.svg" alt="LogicBox LMS" className="h-10 w-auto" />
           </div>
         </div>
         <div className="z-10 max-w-lg self-end text-right">
