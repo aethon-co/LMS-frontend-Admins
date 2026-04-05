@@ -5,6 +5,7 @@ import { useAuth, type Role } from '../context/authContext';
 import { Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
 
 export const Signup: React.FC = () => {
+  const API_BASE = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,8 +19,8 @@ export const Signup: React.FC = () => {
   const signupMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
       const endpoint = data.role === 'admin' 
-        ? 'http://localhost:3000/api/admin/auth/signup'
-        : 'http://localhost:3000/api/tutor/auth/signup';
+        ? `${API_BASE}/admin/auth/signup`
+        : `${API_BASE}/tutor/auth/signup`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
