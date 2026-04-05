@@ -5,7 +5,7 @@ import { useAuth, type Role } from '../context/authContext';
 import { Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
 
 export const Signup: React.FC = () => {
-  const API_BASE = import.meta.env.VITE_API_URL;
+  const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/student\/?$/, '');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
